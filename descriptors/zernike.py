@@ -1,10 +1,10 @@
 #! /usr/bin/env python3
 
-import mahotas as mhs
+from mahotas.features import zernike_moments as zm
 
 
 def zernike_moments(image):
-    moments = mhs.features.zernike_moments(image, 21)
+    moments = zm(image, 21)
 
     return moments
 

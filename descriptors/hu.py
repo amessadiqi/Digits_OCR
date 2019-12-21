@@ -4,8 +4,8 @@ import cv2 as cv
 from math import *
 
 
-def hu_moments(img):
-    moments = cv.moments(img)
+def hu_moments(image):
+    moments = cv.moments(image)
     hu_moments = cv.HuMoments(moments)
 
     for i in range(0, 7):
