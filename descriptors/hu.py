@@ -15,4 +15,9 @@ def hu_moments(img):
 
 
 if __name__ == "__main__":
-    pass
+    import cv2 as cv
+
+    image = cv.imread("../1.png", 0)
+
+    moments = hu_moments(image)
+    print(moments)

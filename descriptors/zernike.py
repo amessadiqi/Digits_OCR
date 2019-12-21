@@ -3,13 +3,15 @@
 import mahotas as mhs
 
 
-def zernike_moments(img):
-    moments = mhs.features.zernike_moments(img, 1)
+def zernike_moments(image):
+    moments = mhs.features.zernike_moments(image, 21)
 
     return moments
 
 
 if __name__ == "__main__":
     import cv2 as cv
-    img = cv.imread("../img/numbers/one/1.png", 0)
-    print(zernike_moments(img))
+    image = cv.imread("../1.png", 0)
+
+    moments = zernike_moments(image)
+    print(moments)

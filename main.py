@@ -36,7 +36,7 @@ for number_img in demo_numbers_label:
 
         output_img = ms.closestNeighbor(learn_imgs, input_img)
 
-        plt.subplot(1,2,1)
+        plt.subplot(1, 2, 1)
         plt.imshow(input_img)
         plt.subplot(1, 2, 2)
         plt.imshow(output_img)
