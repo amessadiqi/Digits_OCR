@@ -1,63 +1,62 @@
 #! /usr/bin/env python3
 
+import classifiers.knn as knn
+import classifiers.svm as svm
+import classifiers.randomForest as randf
+
 from browsers import browseImages
 from descriptors import hu
 from descriptors import zernike
-from descriptors import surf
-from descriptors import hough
 
+
+# Preparing learning images for training
 train_images, numbers_labels = browseImages.numbersImages('./imgs/numbers/')
-numbers_train_labels = sorted(numbers_labels * 7)
+numbers_train_labels = sorted(numbers_labels * len(train_images[0]))
 
+# Loading demo images
+demo_images, demo_numbers_labels = browseImages.numbersImages('./imgs/demo/')
+demo_numbers_labels = sorted(demo_numbers_labels * len(demo_images[0]))
 
-hu_moments_train = []
-for number_images in train_images:
-    for image in number_images:
-        hu_moments_train.append(hu.hu_moments(image))
+# Classification using Hu moments
+# Step 1: Calculating Hu moments for all database images and demo images
 
-"""
-zernike_moments_train = []
-for number_images in train_images:
-    number_zernike_moments = []
-    for image in number_images:
-        number_zernike_moments.append(zernike.zernike_moments(image))
+print("Hu Moments : ")
 
-    zernike_moments_train.append(number_zernike_moments)
-"""
-"""
-surf_train = []
-for number_images in train_images:
-    number_surfs = []
-    for image in number_images:
-        number_surfs.append(surf.surf(image))
-    surf_train.append(number_surfs)
-"""
-"""
-hough_train = []
-for number_images in train_images:
-    number_houghs = []
-    for image in number_images:
-        number_houghs.append(hough.hough(image))
-    hough_train.append(number_houghs)
-"""
-"""
-from sklearn.neighbors import KNeighborsClassifier
+hu_train_vectors = hu.multiple_hu_moments(train_images)
+hu_train_demo_vectors = hu.multiple_hu_moments(demo_images)
 
-knn = KNeighborsClassifier(n_neighbors=9)
-knn.fit(zernike_moments_train, numbers_train_labels)
-"""
+# Step 2: Classifying images using KNN
 
-"""
-zernike_moments_train = []
-for number_images in train_images:
-    for image in number_images:
-        zernike_moments_train.append(zernike.zernike_moments(image).tolist())
-"""
-from classifiers.randomForest import randomForest
-import cv2 as cv
+rate = knn.knn_recognition_rate(hu_train_vectors, numbers_train_labels,
+                                hu_train_demo_vectors, demo_numbers_labels)
+print("KNearest-neighbors recognition rate:", rate, "%")
 
-imtest = cv.imread("number.png", 0)
-imtest_zernike = zernike.zernike_moments(imtest)
+rate = svm.svc_recognition_rate(hu_train_vectors, numbers_train_labels,
+                                hu_train_demo_vectors, demo_numbers_labels)
+print("Svc recognition rate:", rate, "%")
 
-print(randomForest(hu_moments_train, numbers_train_labels, [imtest_zernike]))
+rate = randf.random_forest_recognition_rate(hu_train_vectors, numbers_train_labels,
+                                hu_train_demo_vectors, demo_numbers_labels)
+print("Random forest recognition rate:", rate, "%")
 
+# Classification using Zernike moments
+# Step 1: Calculating Zernike moments for all database images and demo images
+
+print("\n\nZernike Moments : ")
+
+zernike_train_vectors = zernike.multiple_zernike_moments(train_images)
+zernike_train_demo_vectors = zernike.multiple_zernike_moments(demo_images)
+
+# Step 2: Classifying images using KNN
+
+rate = knn.knn_recognition_rate(zernike_train_vectors, numbers_train_labels,
+                                zernike_train_demo_vectors, demo_numbers_labels)
+print("KNearest-neighbors recognition rate:", rate, "%")
+
+rate = svm.svc_recognition_rate(zernike_train_vectors, numbers_train_labels,
+                                zernike_train_demo_vectors, demo_numbers_labels)
+print("Svc recognition rate:", rate, "%")
+
+rate = randf.random_forest_recognition_rate(zernike_train_vectors, numbers_train_labels,
+                                zernike_train_demo_vectors, demo_numbers_labels)
+print("Random forest recognition rate:", rate, "%")

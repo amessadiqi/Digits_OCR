@@ -11,7 +11,20 @@ def hu_moments(image):
     for i in range(0, 7):
         hu_moments[i] = -1 * copysign(1.0, hu_moments[i]) * log10(abs(hu_moments[i]))
 
-    return hu_moments
+    hu_moments_adapted = []
+    for element in hu_moments:
+        hu_moments_adapted.append(float(element))
+
+    return hu_moments_adapted
+
+
+def multiple_hu_moments(images):
+    hu_moments_all = []
+    for element in images:
+        for image in element:
+            hu_moments_all.append(hu_moments(image))
+
+    return hu_moments_all
 
 
 if __name__ == "__main__":

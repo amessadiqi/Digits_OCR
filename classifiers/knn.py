@@ -3,11 +3,27 @@
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def KNN(train_vectors, train_labels_vectors, prediction_vector):
+def knn(train_vectors, train_labels_vectors, prediction_vector):
     knn = KNeighborsClassifier(n_neighbors=9)
     knn.fit(train_vectors, train_labels_vectors)
 
     return knn.predict(prediction_vector)
+
+
+def knn_recognition_rate(train_vectors, train_labels_vectors, prediction_vectors, prediction_vectors_labels):
+    total = len(prediction_vectors)
+    recognized = 0
+
+    i = 0
+    for vector in prediction_vectors:
+        res = knn(train_vectors, train_labels_vectors, [vector])
+
+        if res == prediction_vectors_labels[i]:
+            recognized = recognized + 1
+
+        i = i + 1
+
+    return (recognized / total) * 100
 
 
 if __name__ == "__main__":

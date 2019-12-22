@@ -3,11 +3,27 @@
 from sklearn import svm
 
 
-def SVC(train_vectors, train_labels_vectors, prediction_vector):
-    svc = svm.SVC()
-    svc.fit(train_vectors, train_labels_vectors)
+def svc(train_vectors, train_labels_vectors, prediction_vector):
+    clf = svm.SVC()
+    clf.fit(train_vectors, train_labels_vectors)
 
-    return svc.predict(prediction_vector)
+    return clf.predict(prediction_vector)
+
+
+def svc_recognition_rate(train_vectors, train_labels_vectors, prediction_vectors, prediction_vectors_labels):
+    total = len(prediction_vectors)
+    recognized = 0
+
+    i = 0
+    for vector in prediction_vectors:
+        res = svc(train_vectors, train_labels_vectors, [vector])
+
+        if res == prediction_vectors_labels[i]:
+            recognized = recognized + 1
+
+        i = i + 1
+
+    return (recognized / total) * 100
 
 
 if __name__ == "__main__":
