@@ -4,6 +4,7 @@ from mahotas.features import surf as sf
 
 
 def surf(image):
+    # image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     desc = sf.surf(image)
 
     return desc
@@ -11,7 +12,7 @@ def surf(image):
 
 if __name__ == '__main__':
     import cv2 as cv
-    image = cv.imread("../1.png", 0)
+    image = cv.imread("../number.png")
 
     s = surf(image)
     print(s)

@@ -1,64 +1,63 @@
 #! /usr/bin/env python3
 
-import os
+from browsers import browseImages
+from descriptors import hu
+from descriptors import zernike
+from descriptors import surf
+from descriptors import hough
+
+train_images, numbers_labels = browseImages.numbersImages('./imgs/numbers/')
+numbers_train_labels = sorted(numbers_labels * 7)
+
+
+hu_moments_train = []
+for number_images in train_images:
+    for image in number_images:
+        hu_moments_train.append(hu.hu_moments(image))
+
+"""
+zernike_moments_train = []
+for number_images in train_images:
+    number_zernike_moments = []
+    for image in number_images:
+        number_zernike_moments.append(zernike.zernike_moments(image))
+
+    zernike_moments_train.append(number_zernike_moments)
+"""
+"""
+surf_train = []
+for number_images in train_images:
+    number_surfs = []
+    for image in number_images:
+        number_surfs.append(surf.surf(image))
+    surf_train.append(number_surfs)
+"""
+"""
+hough_train = []
+for number_images in train_images:
+    number_houghs = []
+    for image in number_images:
+        number_houghs.append(hough.hough(image))
+    hough_train.append(number_houghs)
+"""
+"""
+from sklearn.neighbors import KNeighborsClassifier
+
+knn = KNeighborsClassifier(n_neighbors=9)
+knn.fit(zernike_moments_train, numbers_train_labels)
+"""
+
+"""
+zernike_moments_train = []
+for number_images in train_images:
+    for image in number_images:
+        zernike_moments_train.append(zernike.zernike_moments(image).tolist())
+"""
+from classifiers.randomForest import randomForest
 import cv2 as cv
-import matplotlib.pyplot as plt
-from classifiers import matchShapes as ms
 
-learn_imgs = []
+imtest = cv.imread("number.png", 0)
+imtest_zernike = zernike.zernike_moments(imtest)
 
-path = 'imgs/numbers/'
-numbers_label = os.listdir(path)
+print(randomForest(hu_moments_train, numbers_train_labels, [imtest_zernike]))
 
-for number_img in numbers_label:
-    img_files = os.listdir(path + number_img)
-    for img_file in img_files:
-        img_path = path + number_img + '/' + img_file
-
-        img = cv.imread(img_path, 0)
-        img = cv.bitwise_not(img)
-
-        learn_imgs.append(img)
-
-rec_total = 0
-total = 0
-
-path = 'imgs/demo/'
-demo_numbers_label = os.listdir(path)
-
-for number_img in demo_numbers_label:
-    img_files = os.listdir(path + number_img)
-    for img_file in img_files:
-        img_path = path + number_img + '/' + img_file
-
-        input_img = cv.imread(img_path, 0)
-        input_img = cv.bitwise_not(input_img)
-
-        output_img = ms.closestNeighbor(learn_imgs, input_img)
-
-        plt.subplot(1, 2, 1)
-        plt.imshow(input_img)
-        plt.subplot(1, 2, 2)
-        plt.imshow(output_img)
-        plt.show()
-
-        res = int(input("Do the two images match ?\n"))
-        if res == 1:
-            rec_total = rec_total + 1
-        total = total + 1
-
-print("Recognised :", rec_total)
-print("Total :", total)
-print("Recognition rate :", (rec_total/total)*100, "%")
-
-"""
-elements = os.walk(path)
-
-for files in elements:
-    for file in files[2]:
-        if file[-3:] == 'png':  # You can modify this condition depending on your supported formats
-            img = im.imread(files[0] + '/' + file)
-
-            plt.imshow(img)
-            plt.show()
-"""
