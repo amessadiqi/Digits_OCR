@@ -11,7 +11,23 @@ def hough(image):
     max_line_gap = 10
     lines = cv.HoughLinesP(edges, 1, np.pi / 180, 100, min_line_length, max_line_gap)
 
-    return lines
+    res = []
+    lines = list(lines)
+    for line in lines:
+        for element in line:
+            for i in element:
+                res.append(i)
+
+    return res
+
+
+def multiple_hough(images):
+    hough_all = []
+    for element in images:
+        for image in element:
+            hough_all.append(hough(image))
+
+    return hough_all
 
 
 if __name__ == '__main__':

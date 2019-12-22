@@ -4,10 +4,10 @@ from sklearn.neighbors import KNeighborsClassifier
 
 
 def knn(train_vectors, train_labels_vectors, prediction_vector):
-    knn = KNeighborsClassifier(n_neighbors=9)
-    knn.fit(train_vectors, train_labels_vectors)
+    clf = KNeighborsClassifier(n_neighbors=9)
+    clf.fit(train_vectors, train_labels_vectors)
 
-    return knn.predict(prediction_vector)
+    return clf.predict(prediction_vector)
 
 
 def knn_recognition_rate(train_vectors, train_labels_vectors, prediction_vectors, prediction_vectors_labels):

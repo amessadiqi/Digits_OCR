@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 
 from mahotas.features import zernike_moments as zm
+import cv2 as cv
 
 
 def zernike_moments(image):
-    moments = zm(image, 21)
+    gray_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    moments = zm(gray_image, 21)
 
     return moments
 

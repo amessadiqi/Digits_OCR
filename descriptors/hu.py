@@ -5,7 +5,9 @@ from math import *
 
 
 def hu_moments(image):
-    moments = cv.moments(image)
+    gray_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    moments = cv.moments(gray_image)
     hu_moments = cv.HuMoments(moments)
 
     for i in range(0, 7):
